@@ -5,7 +5,7 @@ import {
   getPathWithoutExtension,
   resolveFile,
   requireFile,
-} from './file';
+} from '../file';
 
 describe('getFileExtension', () => {
   it('should resolve an extension', () => {
@@ -41,70 +41,78 @@ describe('getPathWithoutExtension', () => {
 
 describe('requireFile', () => {
   it('should require file with extension', async () => {
-    const file = await requireFile('../package.json');
-    expect(file.name).toEqual('graphql-language-service-utils');
+    const file = await requireFile(
+      path.join(__dirname, '__fixtures__', 'package'),
+    );
+    expect(file.name).toEqual('example');
   });
   it('should fail when requiring an invalid extension', () => {
-    expect(() => requireFile('../.npmignore')).toThrowError(
-      `cannot require() module with extension 'npmignore'`,
+    expect(() => requireFile('./__fixtures__/invalid.fake')).toThrowError(
+      `cannot import() module with extension 'fake'`,
     );
   });
-  it('should fail when requiring a valid extension but invalid js path', () => {
-    expect(() => requireFile('../.npmignore.js')).toThrowError(
-      `Cannot find module '../.npmignore.js' from 'file.ts'`,
+  it('should fail when requiring a valid extension (js) but invalid file path', () => {
+    expect(() => requireFile('./__fixtures__/invalid.js')).toThrowError(
+      `Cannot find module './__fixtures__/invalid.js' from 'file.ts'`,
     );
   });
-  it('should fail when requiring a valid extension but invalid json path', () => {
-    expect(() => requireFile('../.npmignore.json')).toThrowError(
-      `Cannot find module '../.npmignore.json' from 'file.ts'`,
+  it('should fail when requiring a valid extension (json) but invalid file path', () => {
+    expect(() => requireFile('./__fixtures__/npmignore.json')).toThrowError(
+      `Cannot find module './__fixtures__/npmignore.json' from 'file.ts'`,
     );
   });
   it('should require file with no extension using js', async () => {
     const config = await requireFile(
-      path.join(__dirname, '../../../jest.config'),
+      path.join(__dirname, '__fixtures__', 'file'),
     );
-    await expect(config.collectCoverage).toEqual(true);
+    await expect(config.example).toEqual(true);
   });
   it('should require file with no extension using json', async () => {
-    const file = await requireFile(path.join(__dirname, '../package'));
-    expect(file.name).toEqual('graphql-language-service-utils');
+    const file = await requireFile(
+      path.join(__dirname, '__fixtures__', 'package'),
+    );
+    expect(file.name).toEqual('example');
   });
 });
 
 describe('resolveFile', () => {
   it('should resolve when path has extension', () => {
-    const resolvedPath = resolveFile('../package.json');
+    const resolvedPath = resolveFile(path.join(__dirname, './__fixtures__/package.json'));
     expect(resolvedPath).toEqual(
-      require.resolve(path.join(__dirname, '../package.json')),
+      require.resolve(
+        path.join(__dirname, '__fixtures__/package.json'),
+      ),
     );
   });
 
   it('should resolve when path has extension', () => {
-    const resolvedPath = resolveFile(path.join(__dirname, '../package'));
+    const resolvedPath = resolveFile(
+      path.join(__dirname, '__fixtures__', 'package'),
+    );
     expect(resolvedPath).toEqual(
-      require.resolve(path.join(__dirname, '../package.json')),
+      require.resolve(path.join(__dirname, '__fixtures__', 'package')),
     );
   });
 
   it('should resolve when path has extension', () => {
-    const resolvedPath = resolveFile(path.join(__dirname, '../package'));
+    const resolvedPath = resolveFile(
+      path.join(__dirname, '__fixtures__', 'package'),
+    );
     expect(resolvedPath).toEqual(
-      require.resolve(path.join(__dirname, '../package.json')),
+      require.resolve(path.join(__dirname, '__fixtures__', 'package')),
     );
   });
 
   it('should resolve when path has extension but path is not found', () => {
-    expect(() => resolveFile('../../../.eslinignore.js')).toThrowError(
-      `Cannot find module '../../../.eslinignore.js'`,
+    expect(() => resolveFile('./__fixtures__/nonexistant.js')).toThrowError(
+      `Cannot find module './__fixtures__/nonexistant.js' from 'file.ts'`,
     );
   });
 
   it('should resolve when path has no extension', () => {
-    const resolvedPath = resolveFile(
-      path.join(__dirname, '../../../.eslintrc'),
-    );
+    const resolvedPath = resolveFile(path.join(__dirname, '__fixtures__', 'file'));
     expect(resolvedPath).toEqual(
-      require.resolve(path.join(__dirname, '../../../.eslintrc.js')),
+      require.resolve(path.join(__dirname, '__fixtures__', 'file')),
     );
   });
 });

@@ -3,6 +3,10 @@ import { render } from 'react-dom';
 import GraphiQL from 'graphiql';
 import 'graphiql/graphiql.css';
 
+const Logo = () => <span>My Corp</span>
+
+GraphiQL.Logo = Logo
+
 const App = () => (
   <GraphiQL
     style={{ height: '100vh' }}

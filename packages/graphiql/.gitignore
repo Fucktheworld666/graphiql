@@ -1,4 +1,6 @@
 dist/
+esm/
+webpack/
 /graphiql.*js
 /graphiql.*css
 example/yarn.lock

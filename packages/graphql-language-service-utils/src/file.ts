@@ -23,7 +23,7 @@ export function getPathWithoutExtension(
 
 function handleExtensionErr(extension: string | null) {
   if (extension) {
-    throw Error(`cannot require() module with extension '${extension}'`);
+    throw Error(`cannot import() module with extension '${extension}'`);
   }
 }
 // these make webpack happy
